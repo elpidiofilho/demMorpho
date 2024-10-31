@@ -56,7 +56,7 @@ setup_saga <- function(cores = 1, parallel = FALSE) {
 #' @importFrom terra rast
 #' @importFrom terra writeRaster
 #' @export
-write_saga_to_tiff <- function(dir_path, outdir, prefix) {
+write_saga_to_tiff <- function(dir_path, outdir, prefix = 'morpho') {
   # List all .sdat files in the directory
   sdat_files <- list.files(path = dir_path, pattern = "\\.sdat$", full.names = TRUE, ignore.case = TRUE)
 
@@ -81,7 +81,7 @@ write_saga_to_tiff <- function(dir_path, outdir, prefix) {
     # Define the output .tif file name in the specified output directory
     file_name <- basename(sdat)
     file_name_no_ext <- sub("\\.sdat$", "", file_name)
-    tiff_file <- file.path(outdir, paste0(file_name_no_ext, ".tif"))
+    tiff_file <- file.path(outdir, paste0(prefix, file_name_no_ext, ".tif"))
 
     # Try to write the raster to a TIFF file with compression
     tryCatch({
@@ -127,7 +127,7 @@ calculate_hillshade <- function(dem, outdir, azimuth = 315, declination = 45, ve
     cat("Error in SAGA geoprocessor for hillshade:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "hillshade_")
+  write_saga_to_tiff(temp_dir, outdir, prefix, "hillshade_")
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Analytical Hillshading Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
