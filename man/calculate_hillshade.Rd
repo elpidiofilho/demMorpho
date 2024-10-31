@@ -7,6 +7,7 @@
 calculate_hillshade(
   dem,
   outdir,
+  prefix,
   azimuth = 315,
   declination = 45,
   verbose = TRUE,

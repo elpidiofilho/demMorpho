@@ -7,6 +7,7 @@
 calculate_convergence_index(
   dem,
   outdir,
+  prefix,
   method = "Aspect",
   neighbours = 1,
   verbose = TRUE,

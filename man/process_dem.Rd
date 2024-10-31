@@ -8,8 +8,8 @@ process_dem(
   dem,
   outdir,
   prefix = "morpho",
-  cores = 2,
-  parallel = TRUE,
+  cores = 1,
+  parallel = FALSE,
   verbose = TRUE
 )
 }
@@ -17,6 +17,8 @@ process_dem(
 \item{dem}{The file path to the DEM.}
 
 \item{outdir}{The output directory for the processed files.}
+
+\item{prefix}{string to be add at the begging of all file name}
 
 \item{cores}{The number of cores to use for parallel processing. Default is 2.}
 
@@ -29,4 +31,16 @@ None. The function is used for its side effects of processing the DEM.
 }
 \description{
 Processes a DEM using multiple terrain analysis functions in parallel.
+}
+\examples{
+# Define the path to the DEM file and the output directory
+dem_path <- system.file("exdata", "mde_utm.tif", package = "yourPackageName")
+output_directory <- tempdir()  # Use a temporary directory for output
+
+# Process the DEM with default parameters
+process_dem(dem = dem_path, outdir = output_directory, prefix = "morpho")
+
+# Check the output files in the output directory
+list.files(output_directory, pattern = "morpho", full.names = TRUE)
+unlink(output_directory)
 }

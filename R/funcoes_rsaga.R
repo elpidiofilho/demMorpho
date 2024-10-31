@@ -56,7 +56,7 @@ setup_saga <- function(cores = 1, parallel = FALSE) {
 #' @importFrom terra rast
 #' @importFrom terra writeRaster
 #' @export
-write_saga_to_tiff <- function(dir_path, outdir, prefix = 'morpho') {
+write_saga_to_tiff <- function(dir_path, outdir, prefix) {
   # List all .sdat files in the directory
   sdat_files <- list.files(path = dir_path, pattern = "\\.sdat$", full.names = TRUE, ignore.case = TRUE)
 
@@ -107,7 +107,7 @@ write_saga_to_tiff <- function(dir_path, outdir, prefix = 'morpho') {
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating hillshade.
 #' @export
-calculate_hillshade <- function(dem, outdir, azimuth = 315, declination = 45, verbose = TRUE, env) {
+calculate_hillshade <- function(dem, outdir, prefix, azimuth = 315, declination = 45, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -127,7 +127,7 @@ calculate_hillshade <- function(dem, outdir, azimuth = 315, declination = 45, ve
     cat("Error in SAGA geoprocessor for hillshade:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, prefix, "hillshade_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Analytical Hillshading Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -144,9 +144,10 @@ calculate_hillshade <- function(dem, outdir, azimuth = 315, declination = 45, ve
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
+#' @importFrom furrr future_map2
 #' @return None. The function is used for its side effects of generating the convergence index.
 #' @export
-calculate_convergence_index <- function(dem, outdir, method = "Aspect", neighbours = 1, verbose = TRUE, env) {
+calculate_convergence_index <- function(dem, outdir, prefix, method = "Aspect", neighbours = 1, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -164,7 +165,7 @@ calculate_convergence_index <- function(dem, outdir, method = "Aspect", neighbou
     cat("Error in SAGA geoprocessor for convergence index:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "convergence_index_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Convergence Index Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -180,9 +181,10 @@ calculate_convergence_index <- function(dem, outdir, method = "Aspect", neighbou
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
+#' @importFrom furrr future_map2
 #' @return None. The function is used for its side effects of generating curvature classification.
 #' @export
-calculate_curvature_classification <- function(dem, outdir, threshold = 0.05, verbose = TRUE, env) {
+calculate_curvature_classification <- function(dem, outdir, prefix, threshold = 0.05, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -200,7 +202,7 @@ calculate_curvature_classification <- function(dem, outdir, threshold = 0.05, ve
     cat("Error in SAGA geoprocessor for curvature classification:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "curvature_classification_")
+  write_saga_to_tiff(temp_dir, outdir,prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   tt = round(difftime(end_time, start_time, units = "secs"), 2)
@@ -220,9 +222,10 @@ calculate_curvature_classification <- function(dem, outdir, threshold = 0.05, ve
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
+#' @importFrom furrr future_map2
 #' @return None. The function is used for its side effects of generating solar radiation data.
 #' @export
-calculate_solar_radiation <- function(dem, outdir, latitude, start_date = "01-01-2018", end_date = "12-31-2018", verbose = TRUE, env) {
+calculate_solar_radiation <- function(dem, outdir, prefix, latitude, start_date = "01-01-2018", end_date = "12-31-2018", verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -1137,19 +1140,33 @@ calculate_wind_exposition_index <- function(dem, outdir, maxdist = 300, step = 1
 #'
 #' @param dem The file path to the DEM.
 #' @param outdir The output directory for the processed files.
+#' @param prefix string to be add at the begging of all file name
 #' @param cores The number of cores to use for parallel processing. Default is 2.
 #' @param parallel Logical indicating whether to enable parallel processing. Default is TRUE.
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @return None. The function is used for its side effects of processing the DEM.
 #' @importFrom future plan multisession sequential
-#' @importFrom furrr future_map2
+#' @importFrom furrr future_map
+#'
+#' @examples
+#' # Define the path to the DEM file and the output directory
+#' dem_path <- system.file("exdata", "mde_utm.tif", package = "yourPackageName")
+#' output_directory <- tempdir()  # Use a temporary directory for output
+#'
+#' # Process the DEM with default parameters
+#' process_dem(dem = dem_path, outdir = output_directory, prefix = "morpho")
+#'
+#' # Check the output files in the output directory
+#' list.files(output_directory, pattern = "morpho", full.names = TRUE)
+#' unlink(output_directory)
 #' @export
-process_dem <- function(dem, outdir, prefix = 'morpho', cores = 2, parallel = TRUE, verbose = TRUE) {
+process_dem <- function(dem, outdir, prefix = 'morpho', cores = 1,
+                        parallel = FALSE, verbose = TRUE) {
   env <- setup_saga(1, FALSE)
   start_time <- Sys.time()
-  assign("prefixo", prefix, envir = globalenv())
-  prefixo <<- prefix  # variável global
 
+  prefixo <<- prefix  # variável global
+unlink()
   if (!dir.exists(outdir)) {
     dir.create(outdir, recursive = TRUE)
   }
@@ -1196,7 +1213,7 @@ process_dem <- function(dem, outdir, prefix = 'morpho', cores = 2, parallel = TR
   # Use future_map to run functions in parallel
   future_map(functions_to_run, function(f) {
     tryCatch({
-      f(dem, outdir, verbose = FALSE, env = env)
+      f(dem, outdir, prefixo = prefix, verbose = FALSE, env = env)
     }, error = function(e) {
       cat("Error processing function:", e$message, "\n")
     })

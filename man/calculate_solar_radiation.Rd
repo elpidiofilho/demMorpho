@@ -7,6 +7,7 @@
 calculate_solar_radiation(
   dem,
   outdir,
+  prefix,
   latitude,
   start_date = "01-01-2018",
   end_date = "12-31-2018",
