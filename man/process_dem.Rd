@@ -7,7 +7,7 @@
 process_dem(
   dem,
   outdir,
-  prefix = "morpho",
+  prefixo = "morpho",
   cores = 1,
   parallel = FALSE,
   verbose = TRUE
@@ -18,13 +18,13 @@ process_dem(
 
 \item{outdir}{The output directory for the processed files.}
 
-\item{prefix}{string to be add at the begging of all file name}
-
 \item{cores}{The number of cores to use for parallel processing. Default is 2.}
 
 \item{parallel}{Logical indicating whether to enable parallel processing. Default is TRUE.}
 
 \item{verbose}{Logical indicating whether to print progress messages. Default is TRUE.}
+
+\item{prefix}{string to be add at the begging of all file name}
 }
 \value{
 None. The function is used for its side effects of processing the DEM.
@@ -42,5 +42,5 @@ process_dem(dem = dem_path, outdir = output_directory, prefix = "morpho")
 
 # Check the output files in the output directory
 list.files(output_directory, pattern = "morpho", full.names = TRUE)
-unlink(output_directory)
+unlink(output_directory, recursive = TRUE)
 }

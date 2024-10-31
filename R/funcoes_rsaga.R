@@ -144,7 +144,7 @@ calculate_hillshade <- function(dem, outdir, prefix, azimuth = 315, declination 
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
-#' @importFrom furrr future_map2
+#' @importFrom furrr future_map
 #' @return None. The function is used for its side effects of generating the convergence index.
 #' @export
 calculate_convergence_index <- function(dem, outdir, prefix, method = "Aspect", neighbours = 1, verbose = TRUE, env) {
@@ -181,7 +181,7 @@ calculate_convergence_index <- function(dem, outdir, prefix, method = "Aspect", 
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
-#' @importFrom furrr future_map2
+#' @importFrom furrr future_map
 #' @return None. The function is used for its side effects of generating curvature classification.
 #' @export
 calculate_curvature_classification <- function(dem, outdir, prefix, threshold = 0.05, verbose = TRUE, env) {
@@ -222,7 +222,7 @@ calculate_curvature_classification <- function(dem, outdir, prefix, threshold = 
 #' @param verbose Logical indicating whether to print progress messages. Default is TRUE.
 #' @param env The SAGA environment settings.
 #' @importFrom RSAGA rsaga.geoprocessor
-#' @importFrom furrr future_map2
+#' @importFrom furrr future_map
 #' @return None. The function is used for its side effects of generating solar radiation data.
 #' @export
 calculate_solar_radiation <- function(dem, outdir, prefix, latitude, start_date = "01-01-2018", end_date = "12-31-2018", verbose = TRUE, env) {
@@ -260,7 +260,7 @@ calculate_solar_radiation <- function(dem, outdir, prefix, latitude, start_date 
     cat("Error in SAGA geoprocessor for solar radiation:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "solar_radiation_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Potential Incoming Solar Radiation Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -278,7 +278,7 @@ calculate_solar_radiation <- function(dem, outdir, prefix, latitude, start_date 
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating diurnal anisotropic heat data.
 #' @export
-calculate_diurnal_anisotropic_heat <- function(dem, outdir, alpha_max = 202.5, verbose = TRUE, env) {
+calculate_diurnal_anisotropic_heat <- function(dem, outdir, prefix, alpha_max = 202.5, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -296,7 +296,7 @@ calculate_diurnal_anisotropic_heat <- function(dem, outdir, alpha_max = 202.5, v
     cat("Error in SAGA geoprocessor for diurnal anisotropic heat:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "diurnal_anisotropic_heat_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   tt =  round(difftime(end_time, start_time, units = "secs"), 2)
@@ -316,7 +316,7 @@ calculate_diurnal_anisotropic_heat <- function(dem, outdir, alpha_max = 202.5, v
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating downslope distance gradient data.
 #' @export
-calculate_downslope_distance_gradient <- function(dem, outdir, distance = 10, output = 2, verbose = TRUE, env) {
+calculate_downslope_distance_gradient <- function(dem, outdir, prefix, distance = 10, output = 2, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -336,7 +336,7 @@ calculate_downslope_distance_gradient <- function(dem, outdir, distance = 10, ou
     cat("Error in SAGA geoprocessor for downslope distance gradient:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "downslope_distance_gradient_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Downslope Distance Gradient Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -354,7 +354,7 @@ calculate_downslope_distance_gradient <- function(dem, outdir, distance = 10, ou
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating effective air flow heights data.
 #' @export
-calculate_effective_air_flow_heights <- function(dem, outdir, luv = 1, verbose = TRUE, env) {
+calculate_effective_air_flow_heights <- function(dem, outdir, prefix, luv = 1, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -372,7 +372,7 @@ calculate_effective_air_flow_heights <- function(dem, outdir, luv = 1, verbose =
     cat("Error in SAGA geoprocessor for effective air flow heights:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "effective_air_flow_heights_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Effective Air Flow Heights Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -392,7 +392,7 @@ calculate_effective_air_flow_heights <- function(dem, outdir, luv = 1, verbose =
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating mass balance index data.
 #' @export
-calculate_mass_balance_index <- function(dem, outdir, tslope = 15, tcurve = 0.01, threl = 15, verbose = TRUE, env) {
+calculate_mass_balance_index <- function(dem, outdir, prefix, tslope = 15, tcurve = 0.01, threl = 15, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -410,7 +410,7 @@ calculate_mass_balance_index <- function(dem, outdir, tslope = 15, tcurve = 0.01
     cat("Error in SAGA geoprocessor for mass balance index:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "mass_balance_index_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Mass Balance Index Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -428,11 +428,11 @@ calculate_mass_balance_index <- function(dem, outdir, tslope = 15, tcurve = 0.01
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating morphometric protection index data.
 #' @export
-calculate_morphometric_protection_index <- function(dem, outdir, radius = 2000, verbose = TRUE, env) {
+calculate_morphometric_protection_index <- function(dem, outdir,  prefix, radius = 2000, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
-  output_file <- file.path(temp_dir, "morphometric_protection_index.sgrd")
+  output_file <- file.path(temp_dir,  prefix)
 
   if (!file.exists(dem)) {
     stop("The DEM file ", dem, " does not exist.")
@@ -446,7 +446,7 @@ calculate_morphometric_protection_index <- function(dem, outdir, radius = 2000, 
     cat("Error in SAGA geoprocessor for morphometric protection index:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "morphometric_protection_index_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Morphometric Protection Index Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -463,7 +463,7 @@ calculate_morphometric_protection_index <- function(dem, outdir, radius = 2000, 
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating real surface area data.
 #' @export
-calculate_real_surface_area <- function(dem, outdir, verbose = TRUE, env) {
+calculate_real_surface_area <- function(dem, outdir, prefix, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -481,7 +481,7 @@ calculate_real_surface_area <- function(dem, outdir, verbose = TRUE, env) {
     cat("Error in SAGA geoprocessor for real surface area:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "real_surface_area_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Real Surface Area Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -501,7 +501,7 @@ calculate_real_surface_area <- function(dem, outdir, verbose = TRUE, env) {
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating relative heights and slope positions data.
 #' @export
-calculate_relative_heights_and_slope_positions <- function(dem, outdir, w = 0.5, t = 10, e = 2, verbose = TRUE, env) {
+calculate_relative_heights_and_slope_positions <- function(dem, outdir, prefix, w = 0.5, t = 10, e = 2, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -521,7 +521,7 @@ calculate_relative_heights_and_slope_positions <- function(dem, outdir, w = 0.5,
     cat("Error in SAGA geoprocessor for relative heights and slope positions:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "relative_heights_and_slope_positions_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Relative Heights and Slope Positions Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -541,7 +541,7 @@ calculate_relative_heights_and_slope_positions <- function(dem, outdir, w = 0.5,
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating ridge level data.
 #' @export
-calculate_ridge_level <- function(dem, outdir, threshold = 1, nounderground = 1, order = 4, verbose = TRUE, env) {
+calculate_ridge_level <- function(dem, outdir, prefix, threshold = 1, nounderground = 1, order = 4, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -560,7 +560,7 @@ calculate_ridge_level <- function(dem, outdir, threshold = 1, nounderground = 1,
     cat("Error in SAGA geoprocessor for ridge level:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "ridge_level_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Ridge Level Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -581,7 +581,7 @@ calculate_ridge_level <- function(dem, outdir, threshold = 1, nounderground = 1,
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating sky view factor data.
 #' @export
-calculate_sky_view_factor <- function(dem, outdir, radius = 10000, method = 1, dlevel = 3, ndirs = 8, verbose = TRUE, env) {
+calculate_sky_view_factor <- function(dem, outdir, prefix, radius = 10000, method = 1, dlevel = 3, ndirs = 8, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -600,7 +600,7 @@ calculate_sky_view_factor <- function(dem, outdir, radius = 10000, method = 1, d
     cat("Error in SAGA geoprocessor for sky view factor:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "sky_view_factor_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Sky View Factor Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -620,7 +620,7 @@ calculate_sky_view_factor <- function(dem, outdir, radius = 10000, method = 1, d
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating slope, aspect, and curvatures data.
 #' @export
-calculate_slope_aspect_curvatures <- function(dem, outdir, method = 4, unit_slope = 1, unit_aspect = 1, verbose = TRUE, env) {
+calculate_slope_aspect_curvatures <- function(dem, outdir, prefix, method = 4, unit_slope = 1, unit_aspect = 1, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -645,7 +645,7 @@ calculate_slope_aspect_curvatures <- function(dem, outdir, method = 4, unit_slop
     cat("Error in SAGA geoprocessor for slope, aspect, and curvatures:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "slope_aspect_curvatures_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Slope, Aspect, and Curvatures Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -663,7 +663,7 @@ calculate_slope_aspect_curvatures <- function(dem, outdir, method = 4, unit_slop
 #' @param env The SAGA environment settings.
 #' @return None. The function is used for its side effects of generating surface specific points data.
 #' @export
-calculate_surface_specific_points <- function(dem, outdir, method = 1, threshold = 2, verbose = TRUE, env) {
+calculate_surface_specific_points <- function(dem, outdir, prefix, method = 1, threshold = 2, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -681,7 +681,7 @@ calculate_surface_specific_points <- function(dem, outdir, method = 1, threshold
     cat("Error in SAGA geoprocessor for surface specific points:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "surface_specific_points_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Surface Specific Points Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -701,7 +701,7 @@ calculate_surface_specific_points <- function(dem, outdir, method = 1, threshold
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating terrain ruggedness index data.
 #' @export
-calculate_terrain_ruggedness_index <- function(dem, outdir, mode = 1, radius = 1, dw_weighting = 0, verbose = TRUE, env) {
+calculate_terrain_ruggedness_index <- function(dem, outdir, prefix, mode = 1, radius = 1, dw_weighting = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -720,7 +720,7 @@ calculate_terrain_ruggedness_index <- function(dem, outdir, mode = 1, radius = 1
     cat("Error in SAGA geoprocessor for terrain ruggedness index:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "terrain_ruggedness_index_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Terrain Ruggedness Index Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -740,7 +740,7 @@ calculate_terrain_ruggedness_index <- function(dem, outdir, mode = 1, radius = 1
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating terrain surface classification data.
 #' @export
-calculate_terrain_surface_classification <- function(dem, outdir, type = 2, conv_scale = 10, text_scale = 2, verbose = TRUE, env) {
+calculate_terrain_surface_classification <- function(dem, outdir, prefix, type = 2, conv_scale = 10, text_scale = 2, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -760,7 +760,7 @@ calculate_terrain_surface_classification <- function(dem, outdir, type = 2, conv
     cat("Error in SAGA geoprocessor for terrain surface classification:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "terrain_surface_classification_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Terrain Surface Classification (Iwahashi and Pike) Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -780,7 +780,7 @@ calculate_terrain_surface_classification <- function(dem, outdir, type = 2, conv
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating terrain surface convexity data.
 #' @export
-calculate_terrain_surface_convexity <- function(dem, outdir, scale = 3, method = 1, dw_weighting = 3, verbose = TRUE, env) {
+calculate_terrain_surface_convexity <- function(dem, outdir, prefix, scale = 3, method = 1, dw_weighting = 3, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -800,7 +800,7 @@ calculate_terrain_surface_convexity <- function(dem, outdir, scale = 3, method =
     cat("Error in SAGA geoprocessor for terrain surface convexity:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "terrain_surface_convexity_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Terrain Surface Convexity Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -820,7 +820,7 @@ calculate_terrain_surface_convexity <- function(dem, outdir, scale = 3, method =
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating terrain surface texture data.
 #' @export
-calculate_terrain_surface_texture <- function(dem, outdir, scale = 10, method = 1, dw_weighting = 3, verbose = TRUE, env) {
+calculate_terrain_surface_texture <- function(dem, outdir, prefix, scale = 10, method = 1, dw_weighting = 3, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -840,7 +840,7 @@ calculate_terrain_surface_texture <- function(dem, outdir, scale = 10, method = 
     cat("Error in SAGA geoprocessor for terrain surface texture:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "terrain_surface_texture_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Terrain Surface Texture Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -861,7 +861,7 @@ calculate_terrain_surface_texture <- function(dem, outdir, scale = 10, method = 
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating topographic openness data.
 #' @export
-calculate_topographic_openness <- function(dem, outdir, radius = 10000, method = 1, dlevel = 3, ndirs = 8, verbose = TRUE, env) {
+calculate_topographic_openness <- function(dem, outdir, prefix, radius = 10000, method = 1, dlevel = 3, ndirs = 8, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -880,7 +880,7 @@ calculate_topographic_openness <- function(dem, outdir, radius = 10000, method =
     cat("Error in SAGA geoprocessor for topographic openness:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "topographic_openness_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Topographic Openness Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -900,7 +900,7 @@ calculate_topographic_openness <- function(dem, outdir, radius = 10000, method =
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating topographic position index data.
 #' @export
-calculate_topographic_position_index <- function(dem, outdir, radius_min = 0, radius_max = 100, dw_weighting = 0, verbose = TRUE, env) {
+calculate_topographic_position_index <- function(dem, outdir, prefix, radius_min = 0, radius_max = 100, dw_weighting = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -920,7 +920,7 @@ calculate_topographic_position_index <- function(dem, outdir, radius_min = 0, ra
     cat("Error in SAGA geoprocessor for topographic position index:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "topographic_position_index_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Topographic Position Index Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -942,7 +942,7 @@ calculate_topographic_position_index <- function(dem, outdir, radius_min = 0, ra
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating TPI based landform classification data.
 #' @export
-calculate_tpi_based_landform_classification <- function(dem, outdir, radius_a_min = 0, radius_a_max = 100, radius_b_min = 0, radius_b_max = 1000, dw_weighting = 0, verbose = TRUE, env) {
+calculate_tpi_based_landform_classification <- function(dem, outdir, prefix, radius_a_min = 0, radius_a_max = 100, radius_b_min = 0, radius_b_max = 1000, dw_weighting = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -962,7 +962,7 @@ calculate_tpi_based_landform_classification <- function(dem, outdir, radius_a_mi
     cat("Error in SAGA geoprocessor for TPI based landform classification:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "tpi_based_landform_classification_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("TPI Based Landform Classification Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -983,7 +983,7 @@ calculate_tpi_based_landform_classification <- function(dem, outdir, radius_a_mi
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating valley and ridge detection data.
 #' @export
-calculate_valley_and_ridge_detection <- function(dem, outdir, radius_valley = 1000, radius_hill = 1000, threshold = 100, method = 0, verbose = TRUE, env) {
+calculate_valley_and_ridge_detection <- function(dem, outdir, prefix, radius_valley = 1000, radius_hill = 1000, threshold = 100, method = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -1004,7 +1004,7 @@ calculate_valley_and_ridge_detection <- function(dem, outdir, radius_valley = 10
     cat("Error in SAGA geoprocessor for valley and ridge detection:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "valley_and_ridge_detection_")
+  write_saga_to_tiff(temp_dir, outdir,  prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Valley and Ridge Detection Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -1024,7 +1024,7 @@ calculate_valley_and_ridge_detection <- function(dem, outdir, radius_valley = 10
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating vector ruggedness measure data.
 #' @export
-calculate_vector_ruggedness_measure <- function(dem, outdir, mode = 1, radius = 1, dw_weighting = 0, verbose = TRUE, env) {
+calculate_vector_ruggedness_measure <- function(dem, outdir, prefix, mode = 1, radius = 1, dw_weighting = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -1043,7 +1043,7 @@ calculate_vector_ruggedness_measure <- function(dem, outdir, mode = 1, radius = 
     cat("Error in SAGA geoprocessor for vector ruggedness measure:", e$message, "\n")
   })
 
-  write_saga_to_tiff(temp_dir, outdir, "vector_ruggedness_measure_")
+  write_saga_to_tiff(temp_dir, outdir, prefix)
   unlink(temp_dir, recursive = TRUE)
   end_time <- Sys.time()
   if (verbose) cat("Vector Ruggedness Measure Finished in", round(difftime(end_time, start_time, units = "secs"), 2), "seconds\n")
@@ -1066,7 +1066,7 @@ calculate_vector_ruggedness_measure <- function(dem, outdir, mode = 1, radius = 
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating wetness index data.
 #' @export
-calculate_wetness_index <- function(dem, outdir, suction = 10, area_type = 1, slope_type = 1, slope_min = 0, slope_off = 0.1, slope_weight = 1, verbose = TRUE, env) {
+calculate_wetness_index <- function(dem, outdir, prefix, suction = 10, area_type = 1, slope_type = 1, slope_min = 0, slope_off = 0.1, slope_weight = 1, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -1109,7 +1109,7 @@ calculate_wetness_index <- function(dem, outdir, suction = 10, area_type = 1, sl
 #' @importFrom RSAGA rsaga.geoprocessor
 #' @return None. The function is used for its side effects of generating wind exposition index data.
 #' @export
-calculate_wind_exposition_index <- function(dem, outdir, maxdist = 300, step = 15, oldver = 0, accel = 1.5, pyramids = 0, verbose = TRUE, env) {
+calculate_wind_exposition_index <- function(dem, outdir, prefix,  maxdist = 300, step = 15, oldver = 0, accel = 1.5, pyramids = 0, verbose = TRUE, env) {
   start_time <- Sys.time()
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -1158,15 +1158,13 @@ calculate_wind_exposition_index <- function(dem, outdir, maxdist = 300, step = 1
 #'
 #' # Check the output files in the output directory
 #' list.files(output_directory, pattern = "morpho", full.names = TRUE)
-#' unlink(output_directory)
+#' unlink(output_directory, recursive = TRUE)
 #' @export
-process_dem <- function(dem, outdir, prefix = 'morpho', cores = 1,
+process_dem <- function(dem, outdir, prefixo, cores = 1,
                         parallel = FALSE, verbose = TRUE) {
   env <- setup_saga(1, FALSE)
   start_time <- Sys.time()
 
-  prefixo <<- prefix  # variável global
-unlink()
   if (!dir.exists(outdir)) {
     dir.create(outdir, recursive = TRUE)
   }
@@ -1213,7 +1211,7 @@ unlink()
   # Use future_map to run functions in parallel
   future_map(functions_to_run, function(f) {
     tryCatch({
-      f(dem, outdir, prefixo = prefix, verbose = FALSE, env = env)
+      f(dem, outdir, prefix = prefixo, verbose = FALSE, env = env)
     }, error = function(e) {
       cat("Error processing function:", e$message, "\n")
     })
