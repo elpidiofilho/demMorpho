@@ -8,6 +8,7 @@ calculate_curvature_classification(
   dem,
   outdir,
   prefix,
+  num_tile,
   threshold = 0.05,
   verbose = TRUE,
   env

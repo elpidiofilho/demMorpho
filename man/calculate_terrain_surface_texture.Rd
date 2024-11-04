@@ -7,6 +7,8 @@
 calculate_terrain_surface_texture(
   dem,
   outdir,
+  prefix,
+  num_tile,
   scale = 10,
   method = 1,
   dw_weighting = 3,

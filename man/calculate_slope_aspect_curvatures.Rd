@@ -7,6 +7,8 @@
 calculate_slope_aspect_curvatures(
   dem,
   outdir,
+  prefix,
+  num_tile,
   method = 4,
   unit_slope = 1,
   unit_aspect = 1,

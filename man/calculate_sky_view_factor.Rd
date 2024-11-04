@@ -7,6 +7,8 @@
 calculate_sky_view_factor(
   dem,
   outdir,
+  prefix,
+  num_tile,
   radius = 10000,
   method = 1,
   dlevel = 3,

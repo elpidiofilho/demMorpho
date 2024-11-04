@@ -7,6 +7,8 @@
 calculate_relative_heights_and_slope_positions(
   dem,
   outdir,
+  prefix,
+  num_tile,
   w = 0.5,
   t = 10,
   e = 2,

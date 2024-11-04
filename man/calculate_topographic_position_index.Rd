@@ -7,6 +7,8 @@
 calculate_topographic_position_index(
   dem,
   outdir,
+  prefix,
+  num_tile,
   radius_min = 0,
   radius_max = 100,
   dw_weighting = 0,

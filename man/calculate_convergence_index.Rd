@@ -8,6 +8,7 @@ calculate_convergence_index(
   dem,
   outdir,
   prefix,
+  num_tile,
   method = "Aspect",
   neighbours = 1,
   verbose = TRUE,

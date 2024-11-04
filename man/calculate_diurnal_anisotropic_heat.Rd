@@ -7,6 +7,8 @@
 calculate_diurnal_anisotropic_heat(
   dem,
   outdir,
+  prefix,
+  num_tile,
   alpha_max = 202.5,
   verbose = TRUE,
   env

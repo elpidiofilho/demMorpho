@@ -7,6 +7,8 @@
 calculate_downslope_distance_gradient(
   dem,
   outdir,
+  prefix,
+  num_tile,
   distance = 10,
   output = 2,
   verbose = TRUE,

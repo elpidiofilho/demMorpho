@@ -7,6 +7,8 @@
 calculate_wetness_index(
   dem,
   outdir,
+  prefix,
+  num_tile,
   suction = 10,
   area_type = 1,
   slope_type = 1,

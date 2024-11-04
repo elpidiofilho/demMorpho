@@ -7,6 +7,8 @@
 calculate_ridge_level(
   dem,
   outdir,
+  prefix,
+  num_tile,
   threshold = 1,
   nounderground = 1,
   order = 4,

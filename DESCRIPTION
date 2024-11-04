@@ -16,6 +16,7 @@ URL: https://github.com/elpidiofilho/demMorpho
 BugReports: https://github.com/elpidiofilho/demMorpho/issues
 Imports: 
     dplyr,
+    sf,
     furrr,
     future,
     RSAGA,

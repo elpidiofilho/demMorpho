@@ -4,14 +4,7 @@
 \alias{process_dem}
 \title{Main Processing Function with Parallel Execution}
 \usage{
-process_dem(
-  dem,
-  outdir,
-  prefixo = "morpho",
-  cores = 1,
-  parallel = FALSE,
-  verbose = TRUE
-)
+process_dem(dem, outdir, prefixo, cores = 1, parallel = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{dem}{The file path to the DEM.}

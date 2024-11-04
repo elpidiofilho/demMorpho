@@ -7,6 +7,8 @@
 calculate_tpi_based_landform_classification(
   dem,
   outdir,
+  prefix,
+  num_tile,
   radius_a_min = 0,
   radius_a_max = 100,
   radius_b_min = 0,

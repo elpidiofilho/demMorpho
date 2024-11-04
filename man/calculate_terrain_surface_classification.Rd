@@ -7,6 +7,8 @@
 calculate_terrain_surface_classification(
   dem,
   outdir,
+  prefix,
+  num_tile,
   type = 2,
   conv_scale = 10,
   text_scale = 2,

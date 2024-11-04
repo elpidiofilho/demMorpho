@@ -7,6 +7,8 @@
 calculate_terrain_surface_convexity(
   dem,
   outdir,
+  prefix,
+  num_tile,
   scale = 3,
   method = 1,
   dw_weighting = 3,

@@ -7,6 +7,8 @@
 calculate_vector_ruggedness_measure(
   dem,
   outdir,
+  prefix,
+  num_tile,
   mode = 1,
   radius = 1,
   dw_weighting = 0,

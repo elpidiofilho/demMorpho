@@ -4,7 +4,7 @@
 \alias{write_saga_to_tiff}
 \title{Convert SAGA Files to TIFF}
 \usage{
-write_saga_to_tiff(dir_path, outdir, prefix)
+write_saga_to_tiff(dir_path, outdir, prefix, num_tile)
 }
 \arguments{
 \item{dir_path}{The directory path containing .sdat files.}

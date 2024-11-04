@@ -7,6 +7,8 @@
 calculate_wind_exposition_index(
   dem,
   outdir,
+  prefix,
+  num_tile,
   maxdist = 300,
   step = 15,
   oldver = 0,

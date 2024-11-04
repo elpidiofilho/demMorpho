@@ -4,7 +4,15 @@
 \alias{calculate_effective_air_flow_heights}
 \title{Calculate Effective Air Flow Heights}
 \usage{
-calculate_effective_air_flow_heights(dem, outdir, luv = 1, verbose = TRUE, env)
+calculate_effective_air_flow_heights(
+  dem,
+  outdir,
+  prefix,
+  num_tile,
+  luv = 1,
+  verbose = TRUE,
+  env
+)
 }
 \arguments{
 \item{dem}{The file path to the DEM.}

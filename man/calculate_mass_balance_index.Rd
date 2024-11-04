@@ -7,6 +7,8 @@
 calculate_mass_balance_index(
   dem,
   outdir,
+  prefix,
+  num_tile,
   tslope = 15,
   tcurve = 0.01,
   threl = 15,

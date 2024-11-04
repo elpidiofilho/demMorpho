@@ -7,6 +7,8 @@
 calculate_surface_specific_points(
   dem,
   outdir,
+  prefix,
+  num_tile,
   method = 1,
   threshold = 2,
   verbose = TRUE,

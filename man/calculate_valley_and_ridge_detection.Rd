@@ -7,6 +7,8 @@
 calculate_valley_and_ridge_detection(
   dem,
   outdir,
+  prefix,
+  num_tile,
   radius_valley = 1000,
   radius_hill = 1000,
   threshold = 100,

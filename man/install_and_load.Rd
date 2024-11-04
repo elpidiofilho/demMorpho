@@ -2,7 +2,7 @@
 % Please edit documentation in R/funcoes_rsaga.R
 \name{install_and_load}
 \alias{install_and_load}
-\title{Install and Load Required Packages}
+\title{This function checks if each package in the provided list is installed. If a package is not installed, it installs the package and its dependencies. Then, it loads the package into the R session.}
 \usage{
 install_and_load(packages)
 }

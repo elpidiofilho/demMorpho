@@ -4,7 +4,7 @@
 \alias{calculate_real_surface_area}
 \title{Calculate Real Surface Area}
 \usage{
-calculate_real_surface_area(dem, outdir, verbose = TRUE, env)
+calculate_real_surface_area(dem, outdir, prefix, num_tile, verbose = TRUE, env)
 }
 \arguments{
 \item{dem}{The file path to the DEM.}

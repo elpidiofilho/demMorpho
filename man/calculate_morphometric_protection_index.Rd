@@ -7,6 +7,8 @@
 calculate_morphometric_protection_index(
   dem,
   outdir,
+  num_tile,
+  prefix,
   radius = 2000,
   verbose = TRUE,
   env
